@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="How Orbit handles your plans, diary and voice: what stays on your phone, and what leaves it.">
+<link rel="icon" href="/img/icon.png">
+<title>Orbit Privacy Policy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&display=swap">
+<style>
+  /* Layout: one calm reading column, like Orbit's own screens: a short "at a glance" panel, then plain sections. Dark-first, matching the app. */
+  :root {
+    --bg: #121214;
+    --surface: #1a1a1e;
+    --raised: #232328;
+    --line: #2c2c32;
+    --fg: #f4f1ec;
+    --muted: #a6a098;
+    --accent: #f5a15b;
+    --accent-soft: rgba(245, 161, 91, 0.13);
+    --display: "Fraunces", Georgia, "Times New Roman", serif;
+    --body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color-scheme: dark;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --bg: #f7f5f1; --surface: #ffffff; --raised: #f0ece6; --line: #e3ddd4;
+      --fg: #1d1b19; --muted: #6b645c; --accent: #b4611c; --accent-soft: rgba(180, 97, 28, 0.10);
+      color-scheme: light;
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #f7f5f1; --surface: #ffffff; --raised: #f0ece6; --line: #e3ddd4;
+    --fg: #1d1b19; --muted: #6b645c; --accent: #b4611c; --accent-soft: rgba(180, 97, 28, 0.10);
+    color-scheme: light;
+  }
+
+  body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 17px; line-height: 1.6; }
+  .page { max-width: 40rem; margin: 0 auto; padding-inline: 20px; padding-block: 48px 72px; display: flex; flex-direction: column; gap: 40px; }
+
+  header { display: flex; flex-direction: column; gap: 14px; }
+  .mark { width: 44px; height: 44px; position: relative; }
+  .mark .ring { position: absolute; inset: 4px; border: 1.5px solid var(--line); border-radius: 50%; }
+  .mark .moon { position: absolute; inset: 15px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #ffe6cc 0 28%, #f7b072 29% 70%, #c9743a 71%); }
+  .mark .planet { position: absolute; top: 2px; left: 28px; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  h1 { font-family: var(--display); font-weight: 600; font-size: clamp(2rem, 6vw, 2.6rem); line-height: 1.12; letter-spacing: -0.01em; margin: 0; text-wrap: balance; }
+  .meta { color: var(--muted); font-size: 0.92rem; margin: 0; }
+  .lede { margin: 0; font-size: 1.08rem; max-width: 36rem; }
+
+  .glance { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 22px 22px 18px; display: flex; flex-direction: column; gap: 10px; }
+  .glance h2 { margin: 0 0 4px; }
+  .glance ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .glance li { display: grid; grid-template-columns: 22px 1fr; gap: 10px; align-items: start; }
+  .glance li::before { content: ""; width: 8px; height: 8px; margin: 9px 0 0 6px; border-radius: 50%; background: var(--accent); }
+
+  .contact { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; background: var(--accent-soft); border-radius: 14px; padding: 14px 16px; }
+  .contact .label { font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); width: 100%; }
+  .contact .email { font-weight: 600; user-select: all; word-break: break-all; min-width: 0; }
+  .copy { font: inherit; font-size: 0.9rem; color: var(--fg); background: var(--raised); border: 1px solid var(--line); border-radius: 999px; padding: 4px 14px; cursor: pointer; }
+  .copy:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  section { display: flex; flex-direction: column; gap: 12px; }
+  h2 { font-family: var(--display); font-weight: 600; font-size: 1.45rem; line-height: 1.25; margin: 0; text-wrap: balance; }
+  h3 { font-size: 1rem; margin: 6px 0 0; }
+  p { margin: 0; }
+  section ul { margin: 0; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 6px; }
+  .opt { font-family: var(--body); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); border: 1px solid currentColor; border-radius: 999px; padding: 1px 8px; vertical-align: 0.25em; margin-left: 8px; white-space: nowrap; }
+  .path { font-weight: 600; white-space: nowrap; }
+  a { color: var(--accent); text-underline-offset: 3px; }
+  hr { border: 0; border-top: 1px solid var(--line); margin: 0; }
+  footer { color: var(--muted); font-size: 0.9rem; }
+</style>
+
+</head>
+<body>
+<div class="page">
+  <header>
+    <p style="margin:0"><a href="/" style="text-decoration:none">‹ Orbit</a></p>
+    
+    <div class="mark" aria-hidden="true"><span class="ring"></span><span class="moon"></span><span class="planet"></span></div>
+    <h1>Orbit privacy policy</h1>
+    <p class="meta">Last updated 13 November 2026 · Draft, not yet reviewed by a lawyer</p>
+    <p class="lede">Orbit is a calendar, diary and people helper, made with neurodivergent people in mind. What you tell Orbit is personal, so this page explains plainly what happens to it.</p>
+  </header>
+
+  <div class="glance">
+    <h2>The short version</h2>
+    <ul>
+      <li>Your voice never leaves your phone. Speech is turned into text on the phone.</li>
+      <li>Your diary, plans, people and places are kept on your phone.</li>
+      <li>When Orbit needs help understanding something, it sends only what that one request needs to the AI that powers it, through Orbit's own server, which doesn't keep it.</li>
+      <li>When Orbit talks back in its natural voice, the words it says are turned into sound by Google, through Orbit's server. You can choose your phone's own voice instead.</li>
+      <li>Backups and anything you share with a partner are locked on your phone before they leave it. Orbit can't read them.</li>
+      <li>No ads, no tracking, no selling of data. Ever.</li>
+    </ul>
+  </div>
+
+  <div class="contact">
+    <span class="label">Questions or requests about your data</span>
+    <span class="email" id="email">koterintunca@gmail.com</span>
+    <button class="copy" id="copy" type="button">Copy</button>
+  </div>
+
+  <section>
+    <h2>What stays on your phone</h2>
+    <p>Everything you add to Orbit is stored on your phone: plans and reminders, sticky notes and lists, goals and their steps, diary entries and their highlights, weekly summaries, mood and energy check-ins, people and your notes about them, gift plans, your favourite places, "what helps you", your answers to "About you", and what Orbit has learned about you. You can see and delete all of it in the app (<span class="path">Settings → Privacy &amp; data</span>, and <span class="path">Settings → You → What Orbit knows about you</span>).</p>
+    <h3>Listening</h3>
+    <p>When you tap the mic, your speech is turned into text by your phone itself (Apple's on-device speech recognition). The recording is never sent anywhere, including to Orbit.</p>
+    <h3>Screenshots</h3>
+    <p>When you add plans from a screenshot, your phone reads the words in it itself (Apple's on-device text recognition). The picture is only sent anywhere if you tap "Let Claude look at it" (see below).</p>
+    <h3>Talking back</h3>
+    <p>Orbit speaks in its own natural voice, made by Google (see "Orbit's voice" below). If you choose "This iPhone's voice", speech is made on your phone and nothing is sent.</p>
+    <h3>Reminders</h3>
+    <p>Reminders are scheduled on your phone and never pass through a server. Orbit's server sends only short announcements, like “A new Orbit is ready”, through Expo's push service; for these it keeps your phone's push address, the app's build number and language, linked to your install's anonymous ID, never what your reminders say. You can choose "Private notifications" so the lock screen doesn't show what a reminder is about, and lock Orbit with Face ID.</p>
+  </section>
+
+  <section>
+    <h2>When Orbit asks its AI for help</h2>
+    <p><strong>Orbit asks first.</strong> Before anything goes to Claude, Orbit asks whether that's okay (when you start, or once if you already used Orbit). If you choose "phone only", nothing is sent to Claude: Orbit understands simple English sentences on your phone, and when something needs Claude it asks you in that moment ("Just this once", "Always use Claude" or "Keep it on my phone"). You can change this any time in Settings → Privacy &amp; data → Orbit's AI (Claude).</p>
+    <p>Simple sentences ("Lunch with Emre at 1") are understood on your phone. For everything else, Orbit sends a request to its own server (hosted by Supabase, in the United States), which passes it to Claude, an AI made by Anthropic. A request contains only what's needed to answer it:</p>
+    <ul>
+      <li>the words you said, typed or pasted (or the words your phone read from a screenshot);</li>
+      <li>the titles and times of your plans for the coming weeks;</li>
+      <li>the names of people in Orbit, and your notes about a person only when you mention them;</li>
+      <li>the names of your saved places, what kind of place they are, and whose favourite they are;</li>
+      <li>a few relevant diary lines, only when you ask a question or say how you feel;</li>
+      <li>your "About you" answers and what Orbit learned about you, so it can answer your way, and your partner's first name if couple mode is on.</li>
+    </ul>
+    <p><strong>A screenshot itself</strong> is sent only when you tap "Let Claude look at it" or "Let Claude look at the picture". It is used once to understand it and is not stored by Orbit.</p>
+    <p><strong>Film ideas</strong> send only the feeling you mentioned and the films or shows you told Orbit you like, plus a web search for what's new. <strong>Ideas for a person</strong> and <strong>gift ideas</strong> send only what you wrote about that person (for example what they enjoy, what to avoid, a gift budget, and gift ideas you saved), never your diary.</p>
+    <p><strong>Get it done.</strong> To ask you questions about a big goal, explain a path to it and make small steps, Orbit sends the goal, why it matters, your answers to its questions, its short summary of them, the path and the steps (done and open), and, if you filled them in under What Orbit knows about you, what you find hard and what helps when you're stuck (so the plan fits you). When you talk a goal through with Orbit, it also sends that conversation. Never your diary. The conversations are kept on your phone with the goal (and in your locked backup, if it's on).</p>
+    <p><strong>Diary highlights.</strong> When a diary entry you said or typed is long, its text is sent once more to make a short highlight (one line and a few points). The highlight is kept on your phone next to the entry; you can edit or hide it. Entries written with "Answer a few questions" get their highlight made on the phone.</p>
+    <p><strong>The weekly summary</strong> sends only those short highlights (or a short line for short entries), the day of the week and the mood, never full entries; a hidden highlight sends only the mood. The summary is kept on your phone.</p>
+    <p>Orbit's server does not keep the content of these requests. For each install it keeps a daily count of requests, how much AI processing they used and what that cost, so costs stay under control. Anthropic processes requests under its commercial terms: it does not use them to train its models, and keeps them only for a limited time for safety reasons, as described in <a href="https://www.anthropic.com/legal/privacy" rel="noopener">Anthropic's privacy policy</a>.</p>
+    <p>To make these requests, Orbit creates an anonymous ID for your install. It isn't linked to your name or email.</p>
+  </section>
+
+  <section>
+    <h2>Orbit's voice</h2>
+    <p>When Orbit talks back in its own voice (the default), the words it is about to say (for example "Dentist, Friday at 2 PM. Shall I add it?", or an answer to your question) go through Orbit's server to Google Cloud Text-to-Speech, which turns them into sound. Google sees only those words, not who you are, your phone or your location. Google says it doesn't log this text or sound and doesn't use it to train its AI.</p>
+    <p>Orbit's server keeps only a daily count of characters. The sound is saved on your phone so a line heard before doesn't need to be made again; "Delete everything" removes it. To keep everything on the phone, choose <span class="path">Settings → You → Language &amp; voice → This iPhone's voice</span>.</p>
+  </section>
+
+  <section>
+    <h2>Couple mode <span class="opt">Optional</span></h2>
+    <p>If you link Orbit with your partner, the things you choose to share are locked (encrypted) on your phone with a key that exists only in your two invites, then passed through Orbit's server (Supabase, United States). Orbit can't read them. Shared things are:</p>
+    <ul>
+      <li>plans you share, and things you ask each other to do;</li>
+      <li>your energy today (only Low, Okay or Good, and only if you turn it on);</li>
+      <li>when you're busy in the next two weeks (times only, no titles), to suggest time together;</li>
+      <li>the first name you chose to show.</li>
+    </ul>
+    <p>Your diary, notes and everything else are never shared. Either of you can unlink at any time; that deletes everything shared from Orbit's server. Plans already in your calendars stay there.</p>
+  </section>
+
+  <section>
+    <h2>Calendars on your phone <span class="opt">Optional</span></h2>
+    <p>If you turn on “Calendars on this phone”, Orbit reads the calendars your phone already has (for example a work calendar you added to the phone) right on the phone. It never changes them, never stores them on Orbit's server and never puts them in your backup; they are read again each time. For each calendar you choose: show it, show it as “Busy only”, or hide it. With “Busy only” (how work calendars start), what a meeting is about never leaves your phone: Orbit only knows the time is taken. For calendars you show with details, the title, time and place of a relevant event may be sent to Claude with a request, like your other plans. You can turn this off at any time (<span class="path">Settings → Connections</span>), or remove calendar access in your phone's Settings.</p>
+
+    <h2>Google Calendar <span class="opt">Optional</span></h2>
+    <p>If you connect Google Calendar, your phone talks to Google directly, signed in with your own Google account. Orbit asks for two permissions: to see, add and change events in your calendars, and to see the list of your calendars so you can choose which ones show in Orbit. Orbit uses them only to show your Google events in Orbit and to put the plans you add in Orbit into your Google Calendar (rest time shows as busy there). Your Google events are kept on your phone; Orbit's server never stores them. When you ask Orbit something, the titles and times of relevant plans, Google events included, may be part of the request to Claude described above; they are not kept and are never used to train AI models. Orbit never sells Google data, uses it for ads, or lets anyone read it. You can disconnect at any time (<span class="path">Settings → Connections</span>).</p>
+    <p>Orbit's use and transfer of information received from Google APIs adheres to the <a href="https://developers.google.com/terms/api-services-user-data-policy" rel="noopener">Google API Services User Data Policy</a>, including the Limited Use requirements.</p>
+  </section>
+
+  <section>
+    <h2>Backup <span class="opt">Optional</span></h2>
+    <p>If you turn on backup, your phone locks each part of your data with your backup password before it's sent (AES-256-GCM encryption, with a key made from your password using scrypt). The locked copy is stored in Orbit's database (Supabase, United States), linked to your Google account ID so it can follow you to a new phone.</p>
+    <p>Orbit can't open your backup. It can see only the Google account ID it belongs to, when it was saved, and how many items each part holds. Your password is never sent or stored; your phone keeps the key in its Keychain. If you forget the password, the backup can't be opened by anyone, including Orbit. You can delete the backup at any time (<span class="path">Settings → Connections → Backup</span>).</p>
+  </section>
+
+  <section>
+    <h2>Places and travel times <span class="opt">Optional</span></h2>
+    <p>To find a place, suggest somewhere nearby or tell you when to leave, Orbit sends what you searched for, and your current location when it's needed, to Google Maps through Orbit's server. Orbit uses your location only while the app is open, only after you allow it, and doesn't store it. Each search is counted, but not what you searched for.</p>
+  </section>
+
+  <section>
+    <h2>Feedback <span class="opt">Optional</span></h2>
+    <p>If you send feedback from Settings, Orbit's server stores what you typed, how Orbit feels to you (Hard to use / Okay / Helpful), the app version, your language and phone type, linked to your install's anonymous ID. Nothing else is attached.</p>
+  </section>
+
+  <section>
+    <h2>Orbit Premium <span class="opt">When available</span></h2>
+    <p>Payments are handled by Apple. To know whether you have Premium, Orbit uses RevenueCat, which receives your install's anonymous ID and your purchase status from Apple. Orbit never sees your payment details.</p>
+  </section>
+
+  <section>
+    <h2>What Orbit never does</h2>
+    <ul>
+      <li>Show ads or use advertising or analytics trackers.</li>
+      <li>Sell or share your data with anyone for marketing.</li>
+      <li>Send your voice recordings anywhere.</li>
+      <li>Read your backup or what you share with your partner.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Your choices</h2>
+    <ul>
+      <li>Delete everything on your phone: <span class="path">Settings → Privacy &amp; data → Delete everything</span> (this also unlinks couple mode).</li>
+      <li>Delete what Orbit learned about you: <span class="path">Settings → You → What Orbit knows about you</span>.</li>
+      <li>Edit or hide a diary highlight: open the entry in the Diary.</li>
+      <li>Keep Orbit's speech on the phone: <span class="path">Settings → You → Language &amp; voice → This iPhone's voice</span>, or turn talking back off there.</li>
+      <li>Delete your backup: <span class="path">Settings → Connections → Backup</span>.</li>
+      <li>Unlink couple mode: <span class="path">Settings → Connections → Couple mode</span>.</li>
+      <li>Disconnect Google Calendar: <span class="path">Settings → Connections</span>.</li>
+      <li>Stop showing your phone's calendars: <span class="path">Settings → Connections</span>.</li>
+      <li>Lock Orbit with Face ID: <span class="path">Settings → Privacy &amp; data</span>. Hide details in notifications: <span class="path">Settings → Reminders</span>.</li>
+      <li>Deleting the app removes everything stored on your phone.</li>
+    </ul>
+    <p>To ask about your data or have anything on Orbit's server removed, write to <strong>koterintunca@gmail.com</strong>.</p>
+  </section>
+
+  <section>
+    <h2>Health</h2>
+    <p>Orbit helps you plan and reflect. It is not a medical device and doesn't diagnose or treat any condition. If you're struggling, please talk to someone you trust or a health professional.</p>
+  </section>
+
+  <section>
+    <h2>Children</h2>
+    <p>Orbit is not meant for children under 13.</p>
+  </section>
+
+  <hr>
+  <footer>If this policy changes, the new version will be posted here with a new date, and important changes will be shown in the app.</footer>
+</div>
+
+<script>
+  const btn = document.getElementById('copy');
+  btn.addEventListener('click', async () => {
+    const text = document.getElementById('email').textContent.trim();
+    try {
+      await navigator.clipboard.writeText(text);
+      btn.textContent = 'Copied';
+    } catch {
+      const range = document.createRange();
+      range.selectNodeContents(document.getElementById('email'));
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      btn.textContent = 'Selected, press copy';
+    }
+    setTimeout(() => (btn.textContent = 'Copy'), 2000);
+  });
+</script>
+
+</body>
+</html>

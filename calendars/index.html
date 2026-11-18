@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>All your calendars · Orbit</title>
+<meta name="description" content="Show your work, Google, Outlook and iCloud calendars in Orbit. Three steps; your calendars stay on your iPhone.">
+<meta name="theme-color" content="#F6F3EE" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121214" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/img/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&display=swap">
+<link rel="stylesheet" href="/styles.css?v=20261117">
+<style>
+  /* Help page linked from the "all your calendars" notification (2026-11-17).
+     Each step = a small phone picture drawn in HTML (so it follows the language
+     and the day/night look) + two lines of text. */
+  .cal h1 { margin-bottom: 8px; }
+  .cal .lead { font-size: 1.1rem; }
+  .step { display: grid; grid-template-columns: 250px 1fr; gap: 28px; align-items: center; margin: 44px 0; }
+  .step h2 { margin: 0 0 6px; }
+  .step p { margin: 0 0 8px; }
+  .num { display: inline-block; font-weight: 700; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+  .path { display: inline-block; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 6px 10px; color: var(--text); font-size: 15px; font-weight: 600; }
+  .small { font-size: 14px; color: var(--faint); }
+  @media (max-width: 640px) {
+    .step { grid-template-columns: 1fr; gap: 16px; margin: 36px 0; }
+    .step .phone { margin: 0 auto; }
+  }
+
+  /* The little phone */
+  .phone { width: 250px; border-radius: 34px; background: var(--bg); border: 6px solid var(--line); box-shadow: var(--shadow); padding: 16px 12px 18px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; line-height: 1.35; color: var(--text); }
+  .bar { display: flex; justify-content: space-between; font-size: 11px; font-weight: 600; padding: 0 8px 4px; color: var(--text); }
+  .scr-title { font-family: var(--display); font-weight: 600; font-size: 20px; padding: 2px 6px 4px; }
+  .back { color: var(--accent); font-size: 12.5px; padding: 0 6px; }
+  .group { background: var(--surface); border-radius: 12px; overflow: hidden; }
+  .row { display: flex; align-items: center; gap: 9px; padding: 9px 11px; border-top: 1px solid var(--line); }
+  .row:first-child { border-top: 0; }
+  .row .grow { flex: 1; }
+  .chev { color: var(--faint); }
+  .ico { width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center; color: #fff; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+  .blue { background: #3B82F6; } .red { background: #E5534B; } .sky { background: #0EA5E9; } .grey { background: #8E8E93; }
+  .add { color: var(--accent); font-weight: 600; }
+  .glow { box-shadow: 0 0 0 2px var(--accent); }
+
+  .card { background: var(--surface); border-radius: 16px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+  .card b { font-weight: 600; }
+  .hint { color: var(--muted); font-size: 12px; }
+  .btn { background: var(--accent); color: var(--on-accent); border-radius: 12px; padding: 9px; text-align: center; font-weight: 600; font-size: 12.5px; }
+  .label { font-size: 10.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--faint); margin-top: 2px; }
+  .cal-row { display: flex; flex-direction: column; gap: 5px; padding: 6px 0; border-top: 1px solid var(--line); }
+  .cal-row:first-of-type { border-top: 0; }
+  .cal-name { display: flex; align-items: center; gap: 7px; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; }
+  .modes { display: flex; gap: 4px; }
+  .mode { flex: 1; text-align: center; font-size: 11px; padding: 4px 2px; border-radius: 999px; background: var(--raised); color: var(--muted); }
+  .mode.on { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+
+  .plan { display: flex; gap: 9px; align-items: stretch; }
+  .time { width: 38px; color: var(--faint); font-size: 11.5px; padding-top: 8px; text-align: right; }
+  .block { flex: 1; border-radius: 12px; padding: 8px 10px; background: var(--surface); border-left: 4px solid var(--accent); }
+  .block.busy { border-left-color: #3B82F6; background: repeating-linear-gradient(135deg, var(--surface), var(--surface) 6px, var(--raised) 6px, var(--raised) 12px); }
+  .block small { display: block; color: var(--faint); font-size: 11px; }
+
+  /* Stays on your phone */
+  .stay { margin: 54px 0 20px; background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 26px 22px; display: grid; grid-template-columns: 170px 1fr; gap: 22px; align-items: center; }
+  .stay h2 { margin: 0 0 10px; }
+  .stay ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .stay li { display: flex; gap: 10px; color: var(--muted); }
+  .stay li::before { content: ""; flex-shrink: 0; width: 18px; height: 18px; margin-top: 4px; border-radius: 50%; background: var(--accent-soft) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 10.5l3.2 3L15 7' fill='none' stroke='%23D67D2E' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/12px no-repeat; }
+  .stay li b { color: var(--text); font-weight: 600; }
+  .fine { margin-top: 14px; font-size: 14px; color: var(--faint); }
+  @media (max-width: 640px) { .stay { grid-template-columns: 1fr; text-align: left; } .stay svg { margin: 0 auto; } }
+
+  .open { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; margin: 30px 0 10px; }
+  .open a.go { background: var(--accent); color: var(--on-accent); text-decoration: none; font-weight: 600; padding: 13px 20px; border-radius: 14px; }
+</style>
+</head>
+<body>
+<div class="narrow">
+  <header class="top">
+    <a class="brand" href="/"><img src="/img/mark.svg" alt="">Orbit</a>
+    <nav><a href="/privacy/" data-t="nav_privacy">Privacy</a><a href="/support/" data-t="nav_support">Support</a></nav>
+  </header>
+
+  <main class="page cal">
+    <h1 data-t="title">All your calendars, in Orbit</h1>
+    <p class="lead" data-t="lead">Work, Google, Outlook, iCloud: if your iPhone has it, Orbit can show it next to your plans. Three steps, about a minute.</p>
+
+    <!-- Step 1: the iPhone's own Calendar Accounts -->
+    <section class="step">
+      <div class="phone" aria-hidden="true">
+        <div class="bar"><span>9:41</span><span>●●●</span></div>
+        <div class="back" data-t="m_calendar">‹ Calendar</div>
+        <div class="scr-title" data-t="m_accounts">Calendar Accounts</div>
+        <div class="group">
+          <div class="row"><span class="ico sky">☁</span><span class="grow">iCloud</span><span class="chev">›</span></div>
+          <div class="row"><span class="ico red">G</span><span class="grow">Gmail</span><span class="chev">›</span></div>
+          <div class="row"><span class="ico blue">O</span><span class="grow" data-t="m_workAcc">Work (Outlook)</span><span class="chev">›</span></div>
+          <div class="row glow"><span class="grow add" data-t="m_add">Add Account</span><span class="chev">›</span></div>
+        </div>
+      </div>
+      <div>
+        <span class="num" data-t="s1n">Step 1</span>
+        <h2 data-t="s1h">Make sure your iPhone has them</h2>
+        <p data-t="s1p">Orbit shows the calendars your iPhone already has. Missing one, like your work calendar? Add that account on your iPhone:</p>
+        <p><span class="path" data-t="s1path">Settings → Apps → Calendar → Calendar Accounts → Add Account</span></p>
+        <p class="small" data-t="s1old">On iOS 17: Settings → Calendar → Accounts.</p>
+      </div>
+    </section>
+
+    <!-- Step 2: Orbit, Settings → Connections -->
+    <section class="step">
+      <div class="phone" aria-hidden="true">
+        <div class="bar"><span>9:41</span><span>●●●</span></div>
+        <div class="back" data-t="m_settings">‹ Settings</div>
+        <div class="scr-title" data-t="m_conn">Connections</div>
+        <div class="card">
+          <b data-t="m_cop">Calendars on this phone</b>
+          <span class="hint" data-t="m_copHint">See the calendars your phone already has, work ones too, next to your Orbit plans.</span>
+          <div class="btn glow" data-t="m_btn">Show my phone’s calendars</div>
+        </div>
+        <div class="card" style="opacity:.55"><b>Google Calendar</b><span class="hint">…</span></div>
+      </div>
+      <div>
+        <span class="num" data-t="s2n">Step 2</span>
+        <h2 data-t="s2h">Turn them on in Orbit</h2>
+        <p data-t="s2p">In Orbit, open Settings and tap:</p>
+        <p><span class="path" data-t="s2path">Connections → Calendars on this phone</span></p>
+        <p data-t="s2p2">Tap “Show my phone’s calendars” and allow access when your iPhone asks.</p>
+      </div>
+    </section>
+
+    <!-- Step 3: Show / Busy only / Hide -->
+    <section class="step">
+      <div class="phone" aria-hidden="true">
+        <div class="bar"><span>9:41</span><span>●●●</span></div>
+        <div class="card">
+          <b data-t="m_cop">Calendars on this phone</b>
+          <div class="label" lang="en">iCloud</div>
+          <div class="cal-row">
+            <div class="cal-name"><span class="dot" style="background:#F59E0B"></span><span data-t="m_home">Home</span></div>
+            <div class="modes"><span class="mode on" data-t="m_show">Show</span><span class="mode" data-t="m_busyonly">Busy only</span><span class="mode" data-t="m_hide">Hide</span></div>
+          </div>
+          <div class="label" lang="en">Outlook</div>
+          <div class="cal-row">
+            <div class="cal-name"><span class="dot" style="background:#3B82F6"></span><span data-t="m_work">Work</span></div>
+            <div class="modes"><span class="mode" data-t="m_show">Show</span><span class="mode on" data-t="m_busyonly">Busy only</span><span class="mode" data-t="m_hide">Hide</span></div>
+          </div>
+          <div class="label" lang="en">Gmail</div>
+          <div class="cal-row">
+            <div class="cal-name"><span class="dot" style="background:#8E8E93"></span><span data-t="m_birthdays">Birthdays</span></div>
+            <div class="modes"><span class="mode" data-t="m_show">Show</span><span class="mode" data-t="m_busyonly">Busy only</span><span class="mode on" data-t="m_hide">Hide</span></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <span class="num" data-t="s3n">Step 3</span>
+        <h2 data-t="s3h">Choose what each one shows</h2>
+        <p data-t="s3p"><strong>Show</strong>: the whole plan. <strong>Busy only</strong>: Orbit just knows you’re busy then. <strong>Hide</strong>: not in Orbit.</p>
+        <p data-t="s3p2">Work calendars start as Busy only. You can change it any time.</p>
+      </div>
+    </section>
+
+    <!-- Result -->
+    <section class="step">
+      <div class="phone" aria-hidden="true">
+        <div class="bar"><span>9:41</span><span>●●●</span></div>
+        <div class="scr-title" data-t="m_today">Today</div>
+        <div class="plan"><span class="time">09:00</span><div class="block busy"><b data-t="m_busy">Busy</b><small>Outlook · 09:00–10:30</small></div></div>
+        <div class="plan"><span class="time">12:30</span><div class="block"><b data-t="m_lunch">Lunch with Sarah</b><small>Orbit</small></div></div>
+        <div class="plan"><span class="time">15:00</span><div class="block" style="border-left-color:#F59E0B"><b data-t="m_dentist">Dentist</b><small>iCloud</small></div></div>
+      </div>
+      <div>
+        <span class="num" data-t="s4n">Done</span>
+        <h2 data-t="s4h">One calm view of your day</h2>
+        <p data-t="s4p">Your meetings sit next to your Orbit plans on Today and in the Calendar, and Orbit can remind you before them. Orbit only reads: nothing in your calendars is changed.</p>
+      </div>
+    </section>
+
+    <!-- Privacy -->
+    <section class="stay">
+      <svg width="170" height="170" viewBox="0 0 170 170" role="img" aria-labelledby="stayT">
+        <title id="stayT">Your calendars stay inside your iPhone</title>
+        <defs>
+          <radialGradient id="g" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#F5A15B" stop-opacity=".35"/><stop offset="1" stop-color="#F5A15B" stop-opacity="0"/></radialGradient>
+        </defs>
+        <circle cx="85" cy="85" r="82" fill="url(#g)"/>
+        <rect x="52" y="22" width="66" height="126" rx="14" fill="var(--bg)" stroke="var(--text)" stroke-opacity=".55" stroke-width="3"/>
+        <rect x="62" y="40" width="46" height="9" rx="3" fill="#3B82F6" opacity=".85"/>
+        <rect x="62" y="54" width="46" height="9" rx="3" fill="#F59E0B" opacity=".85"/>
+        <rect x="62" y="68" width="46" height="9" rx="3" fill="#D67D2E" opacity=".85"/>
+        <path d="M85 92 l15 6 v10 c0 10 -7 16 -15 19 c-8 -3 -15 -9 -15 -19 v-10 z" fill="#D67D2E"/>
+        <path d="M79 108 l4.5 4 l8 -8.5" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <g stroke="var(--faint)" stroke-width="2.5" stroke-linecap="round" fill="none">
+          <path d="M126 50 q14 -4 22 -16"/><path d="M140 30 l9 3 l-2 9"/>
+          <path d="M136 40 l12 -12" stroke="#E5534B"/><path d="M136 28 l12 12" stroke="#E5534B"/>
+        </g>
+      </svg>
+      <div>
+        <h2 data-t="privh">Your calendars stay on your iPhone</h2>
+        <ul>
+          <li><span data-t="p1"><b>Read on your phone.</b> Orbit never uploads your calendars, never saves them on a server and never puts them in your backup.</span></li>
+          <li><span data-t="p2"><b>Busy only means just that.</b> Orbit sees “busy 09:00–10:30”. What the meeting is, where and the notes never leave your phone.</span></li>
+          <li><span data-t="p3"><b>Never changed.</b> Orbit doesn’t add, move or delete anything in them.</span></li>
+        </ul>
+        <p class="fine" data-t="fine">The small print: when you ask Orbit’s AI something, or use Leave on time, the plans needed for that one answer go along for that moment and are not kept. Busy-only meetings only ever go as “Busy”.</p>
+      </div>
+    </section>
+
+    <div class="open">
+      <a class="go" href="orbit://settings/connections" data-t="open">Open calendar settings in Orbit</a>
+      <span class="small" data-t="openNote">Opens Orbit on this iPhone.</span>
+    </div>
+    <p class="small"><span data-t="questions">Questions?</span> <a href="mailto:hello@orbitcalm.app">hello@orbitcalm.app</a></p>
+  </main>
+  <footer>
+    <div class="row">
+      <div><a href="/">Home</a><a href="/privacy/">Privacy</a><a href="/support/">Support</a><a href="/terms/">Terms</a></div>
+      <div>© 2026 Orbit</div>
+    </div>
+  </footer>
+</div>
+
+<script>
+  // Same six languages as the app. ?lang=tr (from the notification) wins, else the phone's language.
+  const T = {
+    tr: {
+      nav_privacy: 'Gizlilik', nav_support: 'Destek',
+      title: 'Tüm takvimlerin, Orbit’te',
+      lead: 'İş, Google, Outlook, iCloud: iPhone’unda varsa, Orbit planlarının yanında gösterebilir. Üç adım, yaklaşık bir dakika.',
+      m_calendar: '‹ Takvim', m_accounts: 'Takvim Hesapları', m_workAcc: 'İş (Outlook)', m_add: 'Hesap Ekle',
+      s1n: '1. adım', s1h: 'iPhone’unda olduklarından emin ol',
+      s1p: 'Orbit, iPhone’unda zaten olan takvimleri gösterir. Biri eksik mi, mesela iş takvimin? O hesabı iPhone’una ekle:',
+      s1path: 'Ayarlar → Uygulamalar → Takvim → Takvim Hesapları → Hesap Ekle', s1old: 'iOS 17’de: Ayarlar → Takvim → Hesaplar.',
+      m_settings: '‹ Ayarlar', m_conn: 'Bağlantılar', m_cop: 'Bu telefondaki takvimler',
+      m_copHint: 'Telefonundaki takvimleri, iş takvimleri dahil, Orbit planlarının yanında gör.', m_btn: 'Telefonumun takvimlerini göster',
+      s2n: '2. adım', s2h: 'Orbit’te aç', s2p: 'Orbit’te Ayarlar’ı aç ve dokun:', s2path: 'Bağlantılar → Bu telefondaki takvimler',
+      s2p2: '“Telefonumun takvimlerini göster”e dokun ve iPhone’un sorduğunda izin ver.',
+      m_home: 'Ev', m_work: 'İş', m_birthdays: 'Doğum günleri', m_show: 'Göster', m_busyonly: 'Sadece meşgul', m_hide: 'Gizle',
+      s3n: '3. adım', s3h: 'Her biri ne göstersin, seç',
+      s3p: '<strong>Göster</strong>: planın tamamı. <strong>Sadece meşgul</strong>: Orbit sadece o saatte meşgul olduğunu bilir. <strong>Gizle</strong>: Orbit’te yok.',
+      s3p2: 'İş takvimleri “Sadece meşgul” ile başlar. İstediğin zaman değiştirebilirsin.',
+      m_today: 'Bugün', m_busy: 'Meşgul', m_lunch: 'Sarah ile öğle yemeği', m_dentist: 'Dişçi',
+      s4n: 'Bitti', s4h: 'Gününe tek, sakin bir bakış',
+      s4p: 'Toplantıların Bugün’de ve Takvim’de Orbit planlarının yanında durur, Orbit öncesinde sana hatırlatabilir. Orbit sadece okur: takvimlerinde hiçbir şey değişmez.',
+      privh: 'Takvimlerin iPhone’unda kalır',
+      p1: '<b>Telefonunda okunur.</b> Orbit takvimlerini asla yüklemez, bir sunucuda saklamaz, yedeğine de koymaz.',
+      p2: '<b>Sadece meşgul, tam olarak bu demek.</b> Orbit “09:00–10:30 meşgul” görür. Toplantının ne olduğu, nerede olduğu ve notları telefonundan asla çıkmaz.',
+      p3: '<b>Asla değiştirilmez.</b> Orbit onlara bir şey eklemez, taşımaz, silmez.',
+      fine: 'Küçük not: Orbit’in yapay zekâsına bir şey sorduğunda ya da Zamanında çık’ı kullandığında, o tek cevap için gereken planlar o an için gider ve saklanmaz. “Sadece meşgul” toplantılar her zaman yalnızca “Meşgul” olarak gider.',
+      open: 'Orbit’te takvim ayarlarını aç', openNote: 'Bu iPhone’da Orbit’i açar.', questions: 'Sorun mu var?',
+    },
+    es: {
+      nav_privacy: 'Privacidad', nav_support: 'Ayuda',
+      title: 'Todos tus calendarios, en Orbit',
+      lead: 'Trabajo, Google, Outlook, iCloud: si tu iPhone lo tiene, Orbit puede mostrarlo junto a tus planes. Tres pasos, como un minuto.',
+      m_calendar: '‹ Calendario', m_accounts: 'Cuentas de Calendario', m_workAcc: 'Trabajo (Outlook)', m_add: 'Añadir cuenta',
+      s1n: 'Paso 1', s1h: 'Asegúrate de que tu iPhone los tiene',
+      s1p: 'Orbit muestra los calendarios que tu iPhone ya tiene. ¿Falta uno, como el del trabajo? Añade esa cuenta en tu iPhone:',
+      s1path: 'Ajustes → Apps → Calendario → Cuentas de Calendario → Añadir cuenta', s1old: 'En iOS 17: Ajustes → Calendario → Cuentas.',
+      m_settings: '‹ Ajustes', m_conn: 'Conexiones', m_cop: 'Calendarios de este teléfono',
+      m_copHint: 'Ve los calendarios que ya tiene tu teléfono, también los del trabajo, junto a tus planes de Orbit.', m_btn: 'Mostrar los calendarios de mi teléfono',
+      s2n: 'Paso 2', s2h: 'Actívalos en Orbit', s2p: 'En Orbit, abre Ajustes y toca:', s2path: 'Conexiones → Calendarios de este teléfono',
+      s2p2: 'Toca “Mostrar los calendarios de mi teléfono” y permite el acceso cuando tu iPhone lo pida.',
+      m_home: 'Casa', m_work: 'Trabajo', m_birthdays: 'Cumpleaños', m_show: 'Mostrar', m_busyonly: 'Solo ocupado', m_hide: 'Ocultar',
+      s3n: 'Paso 3', s3h: 'Elige qué muestra cada uno',
+      s3p: '<strong>Mostrar</strong>: el plan entero. <strong>Solo ocupado</strong>: Orbit solo sabe que estás ocupado. <strong>Ocultar</strong>: no está en Orbit.',
+      s3p2: 'Los calendarios del trabajo empiezan en Solo ocupado. Puedes cambiarlo cuando quieras.',
+      m_today: 'Hoy', m_busy: 'Ocupado', m_lunch: 'Comida con Sarah', m_dentist: 'Dentista',
+      s4n: 'Listo', s4h: 'Una vista tranquila de tu día',
+      s4p: 'Tus reuniones aparecen junto a tus planes de Orbit en Hoy y en el Calendario, y Orbit puede recordártelas antes. Orbit solo lee: nada de tus calendarios cambia.',
+      privh: 'Tus calendarios se quedan en tu iPhone',
+      p1: '<b>Se leen en tu teléfono.</b> Orbit nunca sube tus calendarios, nunca los guarda en un servidor y nunca los pone en tu copia de seguridad.',
+      p2: '<b>Solo ocupado es exactamente eso.</b> Orbit ve “ocupado 09:00–10:30”. Qué es la reunión, dónde y las notas nunca salen de tu teléfono.',
+      p3: '<b>Nunca se cambian.</b> Orbit no añade, mueve ni borra nada en ellos.',
+      fine: 'La letra pequeña: cuando preguntas algo a la IA de Orbit, o usas Sal a tiempo, los planes necesarios para esa respuesta van en ese momento y no se guardan. Las reuniones en Solo ocupado siempre van solo como “Ocupado”.',
+      open: 'Abrir los ajustes de calendario en Orbit', openNote: 'Abre Orbit en este iPhone.', questions: '¿Preguntas?',
+    },
+    de: {
+      nav_privacy: 'Datenschutz', nav_support: 'Hilfe',
+      title: 'Alle deine Kalender, in Orbit',
+      lead: 'Arbeit, Google, Outlook, iCloud: Wenn dein iPhone ihn hat, kann Orbit ihn neben deinen Plänen zeigen. Drei Schritte, etwa eine Minute.',
+      m_calendar: '‹ Kalender', m_accounts: 'Kalenderaccounts', m_workAcc: 'Arbeit (Outlook)', m_add: 'Account hinzufügen',
+      s1n: 'Schritt 1', s1h: 'Sorge dafür, dass dein iPhone sie hat',
+      s1p: 'Orbit zeigt die Kalender, die dein iPhone schon hat. Fehlt einer, etwa der Arbeitskalender? Füge diesen Account auf dem iPhone hinzu:',
+      s1path: 'Einstellungen → Apps → Kalender → Kalenderaccounts → Account hinzufügen', s1old: 'Unter iOS 17: Einstellungen → Kalender → Accounts.',
+      m_settings: '‹ Einstellungen', m_conn: 'Verbindungen', m_cop: 'Kalender auf diesem Handy',
+      m_copHint: 'Sieh die Kalender deines Handys, auch die der Arbeit, neben deinen Orbit-Plänen.', m_btn: 'Kalender meines Handys zeigen',
+      s2n: 'Schritt 2', s2h: 'In Orbit einschalten', s2p: 'Öffne in Orbit die Einstellungen und tippe auf:', s2path: 'Verbindungen → Kalender auf diesem Handy',
+      s2p2: 'Tippe auf „Kalender meines Handys zeigen“ und erlaube den Zugriff, wenn dein iPhone fragt.',
+      m_home: 'Zuhause', m_work: 'Arbeit', m_birthdays: 'Geburtstage', m_show: 'Zeigen', m_busyonly: 'Nur „Beschäftigt“', m_hide: 'Ausblenden',
+      s3n: 'Schritt 3', s3h: 'Wähle, was jeder zeigt',
+      s3p: '<strong>Zeigen</strong>: der ganze Plan. <strong>Nur „Beschäftigt“</strong>: Orbit weiß nur, dass du dann beschäftigt bist. <strong>Ausblenden</strong>: nicht in Orbit.',
+      s3p2: 'Arbeitskalender starten mit Nur „Beschäftigt“. Du kannst es jederzeit ändern.',
+      m_today: 'Heute', m_busy: 'Beschäftigt', m_lunch: 'Mittagessen mit Sarah', m_dentist: 'Zahnarzt',
+      s4n: 'Fertig', s4h: 'Ein ruhiger Blick auf deinen Tag',
+      s4p: 'Deine Termine stehen neben deinen Orbit-Plänen in Heute und im Kalender, und Orbit kann dich vorher erinnern. Orbit liest nur: In deinen Kalendern ändert sich nichts.',
+      privh: 'Deine Kalender bleiben auf deinem iPhone',
+      p1: '<b>Auf deinem Handy gelesen.</b> Orbit lädt deine Kalender nie hoch, speichert sie nie auf einem Server und legt sie nie in dein Backup.',
+      p2: '<b>Nur „Beschäftigt“ heißt genau das.</b> Orbit sieht „beschäftigt 09:00–10:30“. Worum es geht, wo und die Notizen verlassen dein Handy nie.',
+      p3: '<b>Nie verändert.</b> Orbit fügt nichts hinzu, verschiebt und löscht nichts.',
+      fine: 'Das Kleingedruckte: Wenn du Orbits KI etwas fragst oder „Pünktlich losgehen“ nutzt, gehen die für diese eine Antwort nötigen Pläne in dem Moment mit und werden nicht gespeichert. Termine mit Nur „Beschäftigt“ gehen immer nur als „Beschäftigt“.',
+      open: 'Kalender-Einstellungen in Orbit öffnen', openNote: 'Öffnet Orbit auf diesem iPhone.', questions: 'Fragen?',
+    },
+    it: {
+      nav_privacy: 'Privacy', nav_support: 'Assistenza',
+      title: 'Tutti i tuoi calendari, in Orbit',
+      lead: 'Lavoro, Google, Outlook, iCloud: se il tuo iPhone ce l’ha, Orbit può mostrarlo accanto ai tuoi piani. Tre passi, circa un minuto.',
+      m_calendar: '‹ Calendario', m_accounts: 'Account Calendario', m_workAcc: 'Lavoro (Outlook)', m_add: 'Aggiungi account',
+      s1n: 'Passo 1', s1h: 'Assicurati che il tuo iPhone li abbia',
+      s1p: 'Orbit mostra i calendari che il tuo iPhone ha già. Ne manca uno, come quello di lavoro? Aggiungi quell’account sull’iPhone:',
+      s1path: 'Impostazioni → App → Calendario → Account Calendario → Aggiungi account', s1old: 'Su iOS 17: Impostazioni → Calendario → Account.',
+      m_settings: '‹ Impostazioni', m_conn: 'Collegamenti', m_cop: 'Calendari su questo telefono',
+      m_copHint: 'Vedi i calendari che il telefono ha già, anche quelli di lavoro, accanto ai tuoi piani di Orbit.', m_btn: 'Mostra i calendari del mio telefono',
+      s2n: 'Passo 2', s2h: 'Attivali in Orbit', s2p: 'In Orbit apri Impostazioni e tocca:', s2path: 'Collegamenti → Calendari su questo telefono',
+      s2p2: 'Tocca “Mostra i calendari del mio telefono” e consenti l’accesso quando l’iPhone lo chiede.',
+      m_home: 'Casa', m_work: 'Lavoro', m_birthdays: 'Compleanni', m_show: 'Mostra', m_busyonly: 'Solo occupato', m_hide: 'Nascondi',
+      s3n: 'Passo 3', s3h: 'Scegli cosa mostra ognuno',
+      s3p: '<strong>Mostra</strong>: tutto il piano. <strong>Solo occupato</strong>: Orbit sa solo che sei occupato. <strong>Nascondi</strong>: non è in Orbit.',
+      s3p2: 'I calendari di lavoro partono da Solo occupato. Puoi cambiarlo quando vuoi.',
+      m_today: 'Oggi', m_busy: 'Occupato', m_lunch: 'Pranzo con Sarah', m_dentist: 'Dentista',
+      s4n: 'Fatto', s4h: 'Uno sguardo calmo sulla tua giornata',
+      s4p: 'Le tue riunioni stanno accanto ai piani di Orbit in Oggi e nel Calendario, e Orbit può ricordartele prima. Orbit legge soltanto: nei tuoi calendari non cambia nulla.',
+      privh: 'I tuoi calendari restano sul tuo iPhone',
+      p1: '<b>Letti sul telefono.</b> Orbit non carica mai i tuoi calendari, non li salva mai su un server e non li mette mai nel backup.',
+      p2: '<b>Solo occupato vuol dire proprio questo.</b> Orbit vede “occupato 09:00–10:30”. Cos’è la riunione, dove e le note non lasciano mai il telefono.',
+      p3: '<b>Mai modificati.</b> Orbit non aggiunge, sposta o cancella nulla.',
+      fine: 'Le note in piccolo: quando chiedi qualcosa all’IA di Orbit, o usi Esci in tempo, i piani necessari per quella risposta vanno in quel momento e non vengono conservati. Le riunioni in Solo occupato vanno sempre solo come “Occupato”.',
+      open: 'Apri le impostazioni del calendario in Orbit', openNote: 'Apre Orbit su questo iPhone.', questions: 'Domande?',
+    },
+    pt: {
+      nav_privacy: 'Privacidade', nav_support: 'Ajuda',
+      title: 'Todos os seus calendários, no Orbit',
+      lead: 'Trabalho, Google, Outlook, iCloud: se o seu iPhone tem, o Orbit pode mostrar ao lado dos seus planos. Três passos, mais ou menos um minuto.',
+      m_calendar: '‹ Calendário', m_accounts: 'Contas de Calendário', m_workAcc: 'Trabalho (Outlook)', m_add: 'Adicionar Conta',
+      s1n: 'Passo 1', s1h: 'Confira se o seu iPhone tem todos',
+      s1p: 'O Orbit mostra os calendários que o seu iPhone já tem. Falta algum, como o do trabalho? Adicione essa conta no iPhone:',
+      s1path: 'Ajustes → Apps → Calendário → Contas de Calendário → Adicionar Conta', s1old: 'No iOS 17: Ajustes → Calendário → Contas.',
+      m_settings: '‹ Ajustes', m_conn: 'Conexões', m_cop: 'Calendários deste celular',
+      m_copHint: 'Veja os calendários que o celular já tem, os do trabalho também, ao lado dos seus planos do Orbit.', m_btn: 'Mostrar os calendários do meu celular',
+      s2n: 'Passo 2', s2h: 'Ative no Orbit', s2p: 'No Orbit, abra Ajustes e toque em:', s2path: 'Conexões → Calendários deste celular',
+      s2p2: 'Toque em “Mostrar os calendários do meu celular” e permita o acesso quando o iPhone pedir.',
+      m_home: 'Casa', m_work: 'Trabalho', m_birthdays: 'Aniversários', m_show: 'Mostrar', m_busyonly: 'Só ocupado', m_hide: 'Ocultar',
+      s3n: 'Passo 3', s3h: 'Escolha o que cada um mostra',
+      s3p: '<strong>Mostrar</strong>: o plano todo. <strong>Só ocupado</strong>: o Orbit só sabe que você está ocupado. <strong>Ocultar</strong>: fora do Orbit.',
+      s3p2: 'Calendários de trabalho começam em Só ocupado. Dá para mudar quando quiser.',
+      m_today: 'Hoje', m_busy: 'Ocupado', m_lunch: 'Almoço com a Sarah', m_dentist: 'Dentista',
+      s4n: 'Pronto', s4h: 'Uma visão calma do seu dia',
+      s4p: 'Suas reuniões ficam ao lado dos planos do Orbit em Hoje e no Calendário, e o Orbit pode lembrar você antes. O Orbit só lê: nada nos seus calendários muda.',
+      privh: 'Seus calendários ficam no seu iPhone',
+      p1: '<b>Lidos no seu celular.</b> O Orbit nunca envia seus calendários, nunca os guarda num servidor e nunca os coloca no seu backup.',
+      p2: '<b>Só ocupado é exatamente isso.</b> O Orbit vê “ocupado 09:00–10:30”. O que é a reunião, onde e as notas nunca saem do seu celular.',
+      p3: '<b>Nunca alterados.</b> O Orbit não adiciona, move nem apaga nada.',
+      fine: 'As letras miúdas: quando você pergunta algo à IA do Orbit, ou usa Saia na hora, os planos necessários para essa resposta vão naquele momento e não são guardados. Reuniões em Só ocupado sempre vão só como “Ocupado”.',
+      open: 'Abrir os ajustes de calendário no Orbit', openNote: 'Abre o Orbit neste iPhone.', questions: 'Dúvidas?',
+    },
+  };
+  let lang = '';
+  try { lang = new URLSearchParams(location.search).get('lang') || ''; } catch (e) {}
+  lang = (lang || navigator.language || 'en').slice(0, 2).toLowerCase();
+  const dict = T[lang];
+  if (dict) {
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-t]').forEach((el) => {
+      const s = dict[el.dataset.t];
+      if (s) el.innerHTML = s;
+    });
+    document.title = dict.title + ' · Orbit';
+  }
+</script>
+</body>
+</html>
